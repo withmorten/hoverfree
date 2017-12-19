@@ -34,7 +34,7 @@
     <script src="../js/common.js"></script>
     <script>
         function chkNoUpdateNotifications_onchange() {
-            chrome.extension.sendRequest({
+            browser.runtime.sendMessage({
                 action:'setOption',
                 name:'updateNotifications',
                 value:!document.getElementById('chkNoUpdateNotifications').checked

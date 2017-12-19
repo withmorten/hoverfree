@@ -291,7 +291,7 @@ var hoverZoom = {
                 hz.hzImg.empty();
                 restoreTitles();
             });
-            //chrome.extension.sendRequest({action: 'viewWindow', visible: false});
+            //browser.runtime.sendMessage({action: 'viewWindow', visible: false});
         }
 
         function documentMouseMove(event) {
@@ -483,7 +483,7 @@ var hoverZoom = {
 
             if (options.addToHistory && !chrome.extension.inIncognitoContext) {
                 var url = hz.currentLink.context.href || imgDetails.url;
-                chrome.extension.sendRequest({action:'addUrlToHistory', url:url});
+                browser.runtime.sendMessage({action:'addUrlToHistory', url:url});
             }
         }
 
@@ -628,7 +628,7 @@ var hoverZoom = {
             });
 
             if (options.pageActionEnabled && !pageActionShown && showPageAction) {
-                chrome.extension.sendRequest({action:'showPageAction'});
+                browser.runtime.sendMessage({action:'showPageAction'});
                 pageActionShown = true;
             }
         }
@@ -651,7 +651,7 @@ var hoverZoom = {
                 clearTimeout(preloadTimeout);
                 preloadTimeout = setTimeout(hz.preloadImages, 800);
             } else {
-                chrome.extension.sendRequest({action:'preloadAvailable'});
+                browser.runtime.sendMessage({action:'preloadAvailable'});
             }
 
             prepareDownscaledImagesAsync();
@@ -789,7 +789,7 @@ var hoverZoom = {
         }
 
         function loadOptions() {
-            chrome.extension.sendRequest({action:'getOptions'}, function (result) {
+            browser.runtime.sendMessage({action:'getOptions'}, function (result) {
                 options = result;
                 if (options) {
                 applyOptions();
@@ -970,7 +970,7 @@ var hoverZoom = {
         }
 
         function openImageInWindow() {
-            chrome.extension.sendRequest({action:'getItem', id:'popupBorder'}, function (data) {
+            browser.runtime.sendMessage({action:'getItem', id:'popupBorder'}, function (data) {
                 var createData,
                     popupBorder = {width:16, height:38};
 
@@ -1004,7 +1004,7 @@ var hoverZoom = {
                 createData.top = Math.round(screen.availHeight / 2 - createData.height / 2);
                 createData.left = Math.round(screen.availWidth / 2 - createData.width / 2);
 
-                chrome.extension.sendRequest({
+                browser.runtime.sendMessage({
                     action:'openViewWindow',
                     createData:createData
                 });
@@ -1012,7 +1012,7 @@ var hoverZoom = {
         }
 
         function openImageInTab(background) {
-            chrome.extension.sendRequest({
+            browser.runtime.sendMessage({
                 action:'openViewTab',
                 createData:{
                     url:imgDetails.url,
@@ -1106,7 +1106,7 @@ var hoverZoom = {
             fixFlash();
         }
 
-        chrome.extension.onRequest.addListener(onRequest);
+        browser.runtime.onMessage.addListener(onRequest);
         loadOptions();
     },
 
@@ -1213,13 +1213,13 @@ var hoverZoom = {
             var link = links.eq(preloadIndex++);
             if (link.data().hoverZoomPreloaded) {
                 preloadNextImage();
-                chrome.extension.sendRequest({action:'preloadProgress', value:preloadIndex, max:links.length});
+                browser.runtime.sendMessage({action:'preloadProgress', value:preloadIndex, max:links.length});
             } else {
                 var hoverZoomSrcIndex = link.data().hoverZoomSrcIndex || 0;
                 $('<img src="' + link.data().hoverZoomSrc[hoverZoomSrcIndex] + '">').load(function () {
                     link.data().hoverZoomPreloaded = true;
                     setTimeout(preloadNextImage, preloadDelay);
-                    chrome.extension.sendRequest({action:'preloadProgress', value:preloadIndex, max:links.length});
+                    browser.runtime.sendMessage({action:'preloadProgress', value:preloadIndex, max:links.length});
                 }).error(function () {
                         if (hoverZoomSrcIndex < link.data().hoverZoomSrc.length - 1) {
                             link.data().hoverZoomSrcIndex++;

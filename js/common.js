@@ -60,7 +60,7 @@ function sendOptions(options) {
     });
 
     // Send options to other extension pages
-    chrome.extension.sendRequest(request);
+    browser.runtime.sendMessage(request);
 }
 
 // Return true is the url is part of an excluded site

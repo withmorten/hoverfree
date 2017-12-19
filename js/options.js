@@ -238,6 +238,6 @@ $(function () {
     $('#btnClearExcludedSites').click(btnClearExcludedSitesOnClick);
     $('#aShowUpdateNotification').click(showUpdateNotification);
     restoreOptions();
-    chrome.extension.onRequest.addListener(onRequest);
+    browser.runtime.onMessage.addListener(onRequest);
     $('#versionNumber').text(chrome.app.getDetails().version);
 });

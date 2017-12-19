@@ -110,7 +110,7 @@ function init() {
     options = loadOptions();
 
     // Bind events
-    chrome.extension.onRequest.addListener(onRequest);
+    browser.runtime.onMessage.addListener(onRequest);
 
     checkUpdate();
 }

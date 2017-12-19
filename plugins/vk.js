@@ -11,7 +11,7 @@ hoverZoomPlugins.push({
             if (!listId) {
                 listId = 'photos' + photoId.match(/(\d+)_/)[1];
             }
-            chrome.extension.sendRequest({action:'ajaxRequest',
+            browser.runtime.sendMessage({action:'ajaxRequest',
                     url:'http://vk.com/al_photos.php',
                     method:'POST',
                     data:'al=1&act=show&photo=' + photoId + '&list=' + listId,
@@ -79,7 +79,7 @@ hoverZoomPlugins.push({
                 }
                 data.hoverZoomRequested = true;
                 var userId = this.src.match(/\/u(\d+)\//)[1];
-                chrome.extension.sendRequest({action:'ajaxGet', url:'http://vk.com/al_profile.php?al=1&act=get_profile_photos&offset=0&skip_one=0&id=' + userId}, function (response) {
+                browser.runtime.sendMessage({action:'ajaxGet', url:'http://vk.com/al_profile.php?al=1&act=get_profile_photos&offset=0&skip_one=0&id=' + userId}, function (response) {
                     var photos;
                     try {
                         photos = JSON.parse(response.match(/<!json>(.*)$/)[1]);

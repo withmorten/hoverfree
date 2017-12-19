@@ -32,7 +32,7 @@ $(function () {
             }
         }
     });
-    chrome.extension.onRequest.addListener(onRequest);
+    browser.runtime.onMessage.addListener(onRequest);
 });
 
 function i18n() {
